@@ -1,0 +1,9 @@
+id                  	string              	                    
+type                	string              	                    
+ctime               	string              	                    
+mtime               	string              	                    
+music               	string              	                    
+sdate               	string              	                    
+edate               	string              	                    
+mmdd                	string              	                    
+tags                	string              	                    

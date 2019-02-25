@@ -1,0 +1,55 @@
+device_type         	string              	                    
+sdk_ver             	string              	                    
+channel_code        	string              	                    
+app_ver             	string              	                    
+sys_ver             	string              	                    
+uid                 	string              	                    
+open_udid           	string              	                    
+launch_guid         	string              	                    
+idfa                	string              	                    
+idfv                	string              	                    
+device_token        	string              	                    
+event_code          	string              	                    
+event_guid          	string              	                    
+net                 	string              	                    
+day_first           	string              	                    
+day_before          	string              	                    
+channel_origin      	string              	                    
+event_time          	bigint              	                    
+ctime               	bigint              	                    
+client_ip           	string              	                    
+datetime            	string              	                    
+ip_server           	string              	                    
+app_code            	string              	                    
+attr                	string              	                    
+mfwuuid             	string              	                    
+lat                 	string              	                    
+lng                 	string              	                    
+uri                 	string              	                    
+ref                 	string              	                    
+puri                	string              	                    
+hour                	string              	                    
+umddid              	string              	                    
+hardware_model      	string              	                    
+android_id          	string              	                    
+mfw_did             	string              	                    
+attr_item_title     	string              	                    
+attr_item_index     	string              	                    
+attr_item_business_id	string              	                    
+attr_item_url       	string              	                    
+attr_item_type      	string              	                    
+attr_abtest         	string              	                    
+attr_abtest_type    	string              	                    
+attr__tp            	string              	                    
+attr__tpt           	string              	                    
+attr__tl            	string              	                    
+attr__tpa           	string              	                    
+attr__tid           	string              	                    
+attr__tpre          	string              	                    
+attr__tps           	string              	                    
+dt                  	string              	                    
+	 	 
+# Partition Information	 	 
+# col_name            	data_type           	comment             
+	 	 
+dt                  	string              	                    
