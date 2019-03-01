@@ -686,20 +686,347 @@ object DataProcessing {
 //      get_json_object($"simple_tags", "$.weight").as("tags_weight")
 //    ).filter("tags_weight >= 0.9").show()
 
-    // 31.
-    import spark.implicits._
-    import org.apache.spark.sql.functions.max
-    val df = Seq(
-      ("a", "20190202", 0.8),
-      ("a", "20190203", 0.6),
-      ("c", "20190204", 0.9),
-      ("c", "20190205",0.1)
-    ).toDF("id", "date", "rate")
-    df.drop("date").groupBy("id").agg(max($"rate").as("rate")).
-      join(df, Seq("id", "rate"), "left").show()
+//    // 31.
+//    import spark.implicits._
+//    import org.apache.spark.sql.functions.max
+//    val df = Seq(
+//      ("a", "20190202", 0.8),
+//      ("a", "20190203", 0.6),
+//      ("c", "20190204", 0.9),
+//      ("c", "20190205",0.1)
+//    ).toDF("id", "date", "rate")
+//    df.drop("date").groupBy("id").agg(max($"rate").as("rate")).
+//      join(df, Seq("id", "rate"), "left").show()
 
-    // 32.
+//    // 32.
+//    val m = Constant.MOBILE_EVENT_TO_HOME_SHOW_MAPPING
+//    val df = spark.read.json("mobile_event_parquet.json").cache()
+//    df.createOrReplaceTempView("mobile_event_parquet")
+//    val tableName = "mobile_event_parquet"
+//    val filterCondition = "event_code = 'show_index'"
+//    val map = Constant.MOBILE_EVENT_TO_HOME_SHOW_MAPPING
+//    var sql = "select "
+//    for ((k, v) <- m) {
+//      sql = sql + k + " as " + v + ", "
+//    }
+//    sql = sql.dropRight(2) + " from " + tableName + " where " + filterCondition
+//    spark.sql(sql).show()
 
+//    // 33.
+//    val m = Constant.MOBILE_EVENT_TO_HOME_SHOW_MAPPING
+//    val df = spark.read.json("mobile_event_parquet.json").cache()
+//    df.createOrReplaceTempView("mobile_event_parquet")
+//    val tableName = "mobile_event_parquet"
+//    val filterCondition = "event_code = 'show_index'"
+//    val map = Constant.MOBILE_EVENT_TO_HOME_SHOW_MAPPING
+//    var sql = "select "
+//    for ((k, v) <- m) {
+//      sql = sql + k + " as " + v + ", "
+//    }
+//    sql = sql.dropRight(2) + " from " + tableName + " where " + filterCondition
+//    spark.sql(sql).select("attr_item_type").show(500,false)
+
+//    // 34.
+//    import spark.implicits._
+//    import org.apache.spark.ml.feature.Word2Vec
+//    import org.apache.spark.sql.functions.col
+//    val df = Seq(
+//      (0, "Hi"),
+//      (0, "I"),
+//      (0, "heard"),
+//      (0, "about"),
+//      (0, "Spark"),
+//      (1, "I"),
+//      (1, "wish"),
+//      (1, "Java"),
+//      (1, "could"),
+//      (1, "use"),
+//      (1, "case"),
+//      (1, "classes"),
+//      (2, "Logistic"),
+//      (2, "regression"),
+//      (3, "models"),
+//      (3, "are"),
+//      (3, "neat")
+//    ).toDF("id", "feature").filter(!col("feature").isin(Seq("I", "could"): _*))
+//    val word2VecDf = df.groupBy("id")
+//      .agg("feature" -> "collect_list")
+//      .select($"collect_list(feature)".as("text"))
+//    val word2Vec = new Word2Vec()
+//      .setInputCol("text")
+//      .setMaxIter(30)
+//      .setOutputCol("result")
+//      .setMinCount(0)
+//    val model = word2Vec.fit(word2VecDf)
+//    val result = model.transform(word2VecDf)
+//    result.show()
+
+//    // 35.
+//    import spark.implicits._
+//    import org.apache.spark.ml.feature.Word2Vec
+//    import org.apache.spark.sql.functions.col
+//    val df = Seq(
+//      (0, "Hi"),
+//      (0, "I"),
+//      (0, "heard"),
+//      (0, "about"),
+//      (0, "Spark"),
+//      (1, "I"),
+//      (1, "wish"),
+//      (1, "Java"),
+//      (1, "could"),
+//      (1, "use"),
+//      (1, "case"),
+//      (1, "classes"),
+//      (2, "Logistic"),
+//      (2, "regression"),
+//      (3, "models"),
+//      (3, "are"),
+//      (3, "neat")
+//    ).toDF("id", "feature")
+//    import scala.collection.mutable.ArrayBuffer
+//    var ids = ArrayBuffer[Int]()
+//    df.take(2).foreach { case Row(id: Int, feature: String) => ids += id }
+//    println(ids)
+
+//    // 36.
+//    import spark.implicits._
+//    val df1 = Seq(
+//      (0, "Hi"),
+//      (0, "I"),
+//      (0, "heard"),
+//      (0, "about"),
+//      (0, "Spark")
+//    ).toDF("id", "text")
+//    val df2 = Seq(
+//      (1, "I"),
+//      (1, "wish"),
+//      (1, "Java"),
+//      (1, "could"),
+//      (1, "use"),
+//      (1, "case"),
+//      (1, "classes")
+//    ).toDF("id", "text")
+//    df1.union(df2).show()
+
+//    // 37.
+//    import spark.implicits._
+//    val df1 = Seq(
+//      (0, "Hi"),
+//      (0, "I"),
+//      (0, "heard"),
+//      (0, "about"),
+//      (0, "Spark")
+//    ).toDF("id", "text")
+//    df1.sample(0.6).show()
+
+//    // 38.
+//    import spark.implicits._
+//    val df1 = Seq(
+//      (0, "Hi"),
+//      (0, "I"),
+//      (0, "heard"),
+//      (0, "about"),
+//      (0, "Spark")
+//    ).toDF("id", "text")
+//    val df2 = Seq(
+//      (1, "I"),
+//      (1, "wish"),
+//      (1, "Java"),
+//      (1, "could"),
+//      (1, "use"),
+//      (1, "case"),
+//      (1, "classes")
+//    ).toDF("id", "text")
+//    df1.union(df2).sample(0.8).show()
+
+//    // 39.
+//    import spark.implicits._
+//    val df1 = Seq(
+//      (0, "Hi"),
+//      (0, "I"),
+//      (0, "heard"),
+//      (0, "about"),
+//      (0, "Spark")
+//    ).toDF("id", "text")
+//    spark.createDataFrame(sc.parallelize(df1.take(2)), schema = df1.schema).show()
+
+//    // 40.
+//    import spark.implicits._
+//    val df1 = Seq(
+//      (0, "Hi"),
+//      (0, "I"),
+//      (0, "heard"),
+//      (0, "about"),
+//      (0, "Spark")
+//    ).toDF("id", "text")
+//    val df2 = spark.createDataFrame(sc.parallelize(df1.take(2)), schema = df1.schema)
+//    val df3 = spark.createDataFrame(df1.rdd.subtract(df2.rdd), schema = df1.schema)
+//    df3.show()
+
+//      // 41.
+//      import spark.implicits._
+//      val df1 = Seq(
+//        (0, "Hi"),
+//        (1, "I")
+//      ).toDF("id", "text")
+//      val df2 = Seq(
+//        (0, "Hi"),
+//        (1, "I"),
+//        (2, "Java")
+//      ).toDF("id", "text")
+//      df1.join(df2, Seq("id"), "left").show()
+
+//    // 42.
+//    import spark.implicits._
+//    import org.apache.spark.sql.expressions.Window
+//    import org.apache.spark.sql.functions.{dense_rank, sum}
+//    val orders = Seq(
+//      ("o1", "s1", "2017-05-01", 100),
+//      ("o2", "s1", "2017-05-02", 200),
+//      ("o3", "s2", "2017-05-01", 300)
+//    ).toDF("order_id", "seller_id", "pay_time", "price")
+//    val rankSpec = Window.partitionBy("seller_id").orderBy("pay_time")
+//    val shopOrderRank = orders.withColumn("rank", dense_rank.over(rankSpec))
+//    shopOrderRank.show()
+
+//    // 43.
+//    import spark.implicits._
+//    import org.apache.spark.sql.expressions.Window
+//    import org.apache.spark.sql.functions.{dense_rank, sum}
+//    val orders = Seq(
+//      ("o1", "s1", "2017-05-01", 100),
+//      ("o2", "s1", "2017-05-02", 200),
+//      ("o3", "s2", "2017-05-01", 300)
+//    ).toDF("order_id", "seller_id", "pay_time", "price")
+//    val sumSpec = Window.partitionBy("seller_id").orderBy("pay_time")
+//      .rowsBetween(-1, 0)
+//    orders.withColumn("cumulative_sum", sum("price").over(sumSpec)).show()
+
+//    // 44.
+//    import spark.implicits._
+//    import org.apache.spark.sql.expressions.Window
+//    import org.apache.spark.sql.functions.row_number
+//    val orders = Seq(
+//      ("o1", "s1", "2017-05-01", 100),
+//      ("o2", "s1", "2017-05-02", 200),
+//      ("o3", "s2", "2017-05-01", 300)
+//    ).toDF("order_id", "seller_id", "pay_time", "price")
+//    val window = Window.partitionBy("seller_id").orderBy("pay_time")
+//    orders.withColumn("num", row_number().over(window)).show()
+
+//    // 45.
+//    import spark.implicits._
+//    import org.apache.spark.sql.expressions.Window
+//    import org.apache.spark.sql.functions.{row_number, dense_rank, rank}
+//    val orders = Seq(
+//      ("o1", "s1", "2017-05-01", 100),
+//      ("o2", "s1", "2017-05-02", 100),
+//      ("o3", "s1", "2017-05-03", 200),
+//      ("o3", "s2", "2017-05-01", 300)
+//    ).toDF("order_id", "seller_id", "pay_time", "price")
+//    val window = Window.partitionBy("seller_id").orderBy("price")
+//    orders.withColumn("row_number", row_number().over(window)).show()
+//    orders.withColumn("dense_rank", dense_rank().over(window)).show()
+//    orders.withColumn("rank", rank().over(window)).show()
+
+//    // 46.
+//    import spark.implicits._
+//    val df = Seq(
+//      ("user1", "item1", 1),
+//      ("user1", "item1", 2),
+//      ("user2", "item2", 3)
+//    ).toDF("userid", "itemid", "time")
+//    df.rdd.map(r => {
+//      (r.getAs[String]("userid"), r.getAs[String]("itemid")) -> r
+//    }).reduceByKey((a, b) => {
+//      if (a.getAs[Int]("time") > b.getAs[Int]("time")) {
+//        a
+//      } else {
+//        b
+//      }
+//    }).map(a => {
+//      (a._2.getAs[String]("userid"), a._2.getAs[String]("itemid"), a._2.getAs[Int]("time"))
+//    }).toDF("userid", "itemid", "time").show()
+
+//    // 47.
+//    import spark.implicits._
+//    val user_similarity = Seq(
+//      ("user1", "user2", 0.8),
+//      ("user1", "user3", 0.7),
+//      ("user2", "user1", 0.8)
+//    ).toDF("auid", "buid", "similarity")
+//    val user_action = Seq(
+//      ("user2", "item1"),
+//      ("user2", "item2"),
+//      ("user3", "item2"),
+//      ("user3", "item3")
+//    ).toDF("uid", "iid")
+//    val online_item = Seq(
+//      ("item1"),
+//      ("item2")
+//    ).toDF("oiid")
+//    user_action.join(online_item, $"iid" === $"oiid", "inner")
+//      .groupBy("uid")
+//      .agg("iid" -> "collect_list")
+//      .select($"uid", $"collect_list(iid)".as("items")).printSchema()
+
+//    // 48.
+//    import spark.implicits._
+//    val df = Seq(
+//      ("o1", "s1"),
+//      ("o1", "s2"),
+//      ("o3", "s3")
+//    ).toDF("o", "s")
+//    df.rdd.map(r => {
+//      r.getAs[String]("o") -> r
+//    }).groupByKey().foreach(r => println(r))
+
+//    // 49.
+//    import spark.implicits._
+//    import scala.collection.mutable.HashSet
+//    val user_similarity = Seq(
+//      ("user1", "user2", 0.8),
+//      ("user1", "user3", 0.7),
+//      ("user2", "user1", 0.8)
+//    ).toDF("auid", "buid", "similarity")
+//    val user_action = Seq(
+//      ("user2", "item1"),
+//      ("user2", "item2"),
+//      ("user3", "item2"),
+//      ("user3", "item3")
+//    ).toDF("uid", "iid")
+//    val online_item = Seq(
+//      ("item1"),
+//      ("item2")
+//    ).toDF("oiid")
+//    val online_user_action = user_action.join(online_item, $"iid" === $"oiid", "inner")
+//      .groupBy("uid")
+//      .agg("iid" -> "collect_list")
+//      .select($"uid", $"collect_list(iid)".as("items"))
+//    user_similarity.join(online_user_action, $"buid" === $"uid", "left")
+//      .rdd.map(r => {
+//        r.getAs[String]("auid") -> r
+//      }).groupByKey().map(a => {
+//        val user_sorted = a._2.toArray.sortBy(k => k.getAs[Double]("similarity"))
+//        val all_items = new HashSet[String]()
+//        user_sorted.foreach(i => {
+//          val items = i.getAs[Seq[String]]("items")
+//          if (null != items && !items.isEmpty) {
+//            all_items ++= items
+//          }
+//        })
+//        val item_array = all_items.toArray
+//        var index = item_array.length
+//        a._1 -> item_array.map(i => {
+//          index = index - 1
+//          i + "_" + index
+//        })
+//     }).foreach {
+//      case Tuple2(userid: String, items: Array[String]) => println(userid + "," + items.mkString(";"))
+//    }
+
+    // 50.
 
 
 

@@ -13,9 +13,12 @@ object CommonUtils {
 //    val contentPath = "home_article_list_show.txt"
 //    val descPath = "desc_home_article_list_show.txt"
 //    val savePath = "home_article_list_show.json"
-    val contentPath = "tmp_prefix_recom_item.txt"
-    val descPath = "desc_tmp_prefix_recom_item.txt"
-    val savePath = "tmp_prefix_recom_item.json"
+//    val contentPath = "tmp_prefix_recom_item.txt"
+//    val descPath = "desc_tmp_prefix_recom_item.txt"
+//    val savePath = "tmp_prefix_recom_item.json"
+    val descPath = "desc_mobile_event_parquet.txt"
+    val contentPath = "mobile_event_parquet.txt"
+    val savePath = "mobile_event_parquet.json"
     generateJsonData(contentPath, descPath, savePath)
 //    scalaJsonTest()
   }
