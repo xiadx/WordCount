@@ -12,5 +12,6 @@ object WordCount {
     val pairs = words.map(word => (word, 1))
     val wordCounts = pairs.reduceByKey(_ + _)
     wordCounts.foreach(wordCount => println(wordCount._1 + ": " + wordCount._2))
+    abc
   }
 }
