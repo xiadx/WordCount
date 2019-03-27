@@ -1,10 +1,12 @@
+import java.io.StringWriter
+
 import Constant.MOBILE_EVENT_TO_HOME_SHOW_MAPPING
 
 import scala.collection.mutable.ArrayBuffer
 
 object HelloWord {
   def main(args: Array[String]): Unit = {
-//    // 1.
+    // 1.
 //    import java.util.Calendar
 //    val cal = Calendar.getInstance()
 //    val sdf = new java.text.SimpleDateFormat("yyyyMMdd")
@@ -14,8 +16,8 @@ object HelloWord {
 //    println(startTime_30)
 
 //    // 2.
-//    println(Array("a", "a", "b", "c", "d", "d").groupBy(a => a)
-//        .map(a => a._1 + "=" + a._2.length).mkString(";"))
+    //    println(Array("a", "a", "b", "c", "d", "d").groupBy(a => a)
+    //        .map(a => a._1 + "=" + a._2.length).mkString(";"))
 
 //    // 3.
 //    import scala.util.matching.Regex
@@ -92,8 +94,23 @@ object HelloWord {
 //    }
 //    println(jsonObj.get("attribute").get.asInstanceOf[Map[String, String]].get("age"))
 
-    // 11.
+//    // 11.
+//    val x = Array("a", "b", "c")
+//    val y = Array("b", "c", "d")
+//    x.diff(y).foreach(x => println(x))
+//    x.union(y).foreach(x => println(x))
 
+//    // 12.
+//    import com.fasterxml.jackson.databind.ObjectMapper
+//    import com.fasterxml.jackson.module.scala.DefaultScalaModule
+//    case class Person(name: String, age: Int)
+//    val person = Person("Fred", 65)
+//    val mapper = new ObjectMapper()
+//    mapper.registerModule(DefaultScalaModule)
+//    val out = new StringWriter
+//    mapper.writeValue(out, person)
+//    val json = out.toString
+//    println(json)
 
   }
 

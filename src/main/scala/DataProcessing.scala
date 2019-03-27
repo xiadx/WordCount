@@ -1026,7 +1026,33 @@ object DataProcessing {
 //      case Tuple2(userid: String, items: Array[String]) => println(userid + "," + items.mkString(";"))
 //    }
 
-    // 50.
+//    // 50.
+//    import com.fasterxml.jackson.databind.ObjectMapper
+//    import com.fasterxml.jackson.module.scala.DefaultScalaModule
+//    import spark.implicits._
+//    val df = Seq(
+//      ("o1", "s1"),
+//      ("o1", "s2"),
+//      ("o3", "s3")
+//    ).toDF("o", "s")
+//    val cols = df.columns
+//    df.foreach(i => {
+//      val mapper = new ObjectMapper()
+//      mapper.registerModule(DefaultScalaModule)
+//      println(mapper.writeValueAsString(i.getValuesMap(cols)))
+//    })
+
+//    // 51.
+//    import spark.implicits._
+//    val df = Seq(
+//      ("o1", "s1", "t1"),
+//      ("o2", "s2", "t2"),
+//      ("o3", "s3", "t3")
+//    ).toDF("o", "s", "t")
+//    println(df.rdd.map(i => (i.get(0), (i.get(1), i.get(2)))).collect().toMap)
+
+    // 52.
+
 
 
 

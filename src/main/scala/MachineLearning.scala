@@ -305,10 +305,190 @@ object MachineLearning {
 //    val featurized = hasher.transform(dataset)
 //    featurized.show(false)
 
-    // 18.
+//    // 18.
+//    import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
+//    import org.apache.spark.sql.SparkSession
+//    import org.apache.spark.sql.functions._
+//    val sentenceDataFrame = spark.createDataFrame(Seq(
+//      (0, "Hi I heard about Spark"),
+//      (1, "I wish Java could use case classes"),
+//      (2, "Logistic,regression,models,are,neat")
+//    )).toDF("id", "sentence")
+//    val tokenizer = new Tokenizer().setInputCol("sentence").setOutputCol("words")
+//    val regexTokenizer = new RegexTokenizer()
+//      .setInputCol("sentence")
+//      .setOutputCol("words")
+//      .setPattern("\\W") // alternatively .setPattern("\\w+").setGaps(false)
+//    val countTokens = udf { (words: Seq[String]) => words.length }
+//    val tokenized = tokenizer.transform(sentenceDataFrame)
+//    tokenized.select("sentence", "words")
+//      .withColumn("tokens", countTokens(col("words"))).show(false)
+//    val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
+//    regexTokenized.select("sentence", "words")
+//      .withColumn("tokens", countTokens(col("words"))).show(false)
 
+//    // 19.
+//    import org.apache.spark.ml.feature.StopWordsRemover
+//    val remover = new StopWordsRemover()
+//      .setInputCol("raw")
+//      .setOutputCol("filtered")
+//    val dataSet = spark.createDataFrame(Seq(
+//      (0, Seq("I", "saw", "the", "red", "balloon")),
+//      (1, Seq("Mary", "had", "a", "little", "lamb"))
+//    )).toDF("id", "raw")
+//    remover.transform(dataSet).show(false)
 
+//    // 20.
+//    import org.apache.spark.ml.feature.NGram
+//    val wordDataFrame = spark.createDataFrame(Seq(
+//      (0, Array("Hi", "I", "heard", "about", "Spark")),
+//      (1, Array("I", "wish", "Java", "could", "use", "case", "classes")),
+//      (2, Array("Logistic", "regression", "models", "are", "neat"))
+//    )).toDF("id", "words")
+//    val ngram = new NGram().setN(2).setInputCol("words").setOutputCol("ngrams")
+//    val ngramDataFrame = ngram.transform(wordDataFrame)
+//    ngramDataFrame.select("ngrams").show(false)
 
+//    // 21.
+//    import org.apache.spark.ml.feature.Binarizer
+//    val data = Array((0, 0.1), (1, 0.8), (2, 0.2))
+//    val dataFrame = spark.createDataFrame(data).toDF("id", "feature")
+//    val binarizer: Binarizer = new Binarizer()
+//      .setInputCol("feature")
+//      .setOutputCol("binarized_feature")
+//      .setThreshold(0.5)
+//    val binarizedDataFrame = binarizer.transform(dataFrame)
+//    println(s"Binarizer output with Threshold = ${binarizer.getThreshold}")
+//    binarizedDataFrame.show()
+
+//    // 22.
+//    import org.apache.spark.ml.feature.PCA
+//    import org.apache.spark.ml.linalg.Vectors
+//    val data = Array(
+//      Vectors.sparse(5, Seq((1, 1.0), (3, 7.0))),
+//      Vectors.dense(2.0, 0.0, 3.0, 4.0, 5.0),
+//      Vectors.dense(4.0, 0.0, 0.0, 6.0, 7.0)
+//    )
+//    val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
+//    val pca = new PCA()
+//      .setInputCol("features")
+//      .setOutputCol("pcaFeatures")
+//      .setK(3)
+//      .fit(df)
+//    val result = pca.transform(df).select("pcaFeatures")
+//    result.show(false)
+
+//    // 23.
+//    import org.apache.spark.ml.feature.PolynomialExpansion
+//    import org.apache.spark.ml.linalg.Vectors
+//    val data = Array(
+//      Vectors.dense(2.0, 1.0),
+//      Vectors.dense(0.0, 0.0),
+//      Vectors.dense(3.0, -1.0)
+//    )
+//    val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
+//    val polyExpansion = new PolynomialExpansion()
+//      .setInputCol("features")
+//      .setOutputCol("polyFeatures")
+//      .setDegree(3)
+//    val polyDF = polyExpansion.transform(df)
+//    polyDF.show(false)
+
+//    // 24.
+//    import org.apache.spark.ml.feature.DCT
+//    import org.apache.spark.ml.linalg.Vectors
+//    val data = Seq(
+//      Vectors.dense(0.0, 1.0, -2.0, 3.0),
+//      Vectors.dense(-1.0, 2.0, 4.0, -7.0),
+//      Vectors.dense(14.0, -2.0, -5.0, 1.0))
+//    val df = spark.createDataFrame(data.map(Tuple1.apply)).toDF("features")
+//    val dct = new DCT()
+//      .setInputCol("features")
+//      .setOutputCol("featuresDCT")
+//      .setInverse(false)
+//    val dctDf = dct.transform(df)
+//    dctDf.select("featuresDCT").show(false)
+
+//    // 25.
+//    import org.apache.spark.ml.feature.StringIndexer
+//    val df = spark.createDataFrame(
+//      Seq((0, "a"), (1, "b"), (2, "c"), (3, "a"), (4, "a"), (5, "c"))
+//    ).toDF("id", "category")
+//    val indexer = new StringIndexer()
+//      .setInputCol("category")
+//      .setOutputCol("categoryIndex")
+//    val indexed = indexer.fit(df).transform(df)
+//    indexed.show()
+
+//    // 26.
+//    import org.apache.spark.ml.attribute.Attribute
+//    import org.apache.spark.ml.feature.{IndexToString, StringIndexer}
+//    val df = spark.createDataFrame(Seq(
+//      (0, "a"),
+//      (1, "b"),
+//      (2, "c"),
+//      (3, "a"),
+//      (4, "a"),
+//      (5, "c")
+//    )).toDF("id", "category")
+//    val indexer = new StringIndexer()
+//      .setInputCol("category")
+//      .setOutputCol("categoryIndex")
+//      .fit(df)
+//    val indexed = indexer.transform(df)
+//    println(s"Transformed string column '${indexer.getInputCol}' " +
+//      s"to indexed column '${indexer.getOutputCol}'")
+//    indexed.show()
+//    val inputColSchema = indexed.schema(indexer.getOutputCol)
+//    println(s"StringIndexer will store labels in output column metadata: " +
+//      s"${Attribute.fromStructField(inputColSchema).toString}\n")
+//    val converter = new IndexToString()
+//      .setInputCol("categoryIndex")
+//      .setOutputCol("originalCategory")
+//    val converted = converter.transform(indexed)
+//    println(s"Transformed indexed column '${converter.getInputCol}' back to original string " +
+//      s"column '${converter.getOutputCol}' using labels in metadata")
+//    converted.select("id", "categoryIndex", "originalCategory").show()
+
+//    // 27.
+//    import org.apache.spark.ml.feature.OneHotEncoderEstimator
+//    val df = spark.createDataFrame(Seq(
+//      (0.0, 1.0),
+//      (1.0, 0.0),
+//      (2.0, 1.0),
+//      (0.0, 2.0),
+//      (0.0, 1.0),
+//      (2.0, 0.0)
+//    )).toDF("categoryIndex1", "categoryIndex2")
+//    val encoder = new OneHotEncoderEstimator()
+//      .setInputCols(Array("categoryIndex1", "categoryIndex2"))
+//      .setOutputCols(Array("categoryVec1", "categoryVec2"))
+//    val model = encoder.fit(df)
+//    val encoded = model.transform(df)
+//    encoded.show()
+
+    // 28.
+//    import org.apache.spark.ml.feature.VectorIndexer
+//    val data = spark.read.format("libsvm").load("sample_libsvm_data.txt")
+//    val indexer = new VectorIndexer()
+//      .setInputCol("features")
+//      .setOutputCol("indexed")
+//      .setMaxCategories(10)
+//    val indexerModel = indexer.fit(data)
+//    val categoricalFeatures: Set[Int] = indexerModel.categoryMaps.keys.toSet
+//    println(s"Chose ${categoricalFeatures.size} " +
+//      s"categorical features: ${categoricalFeatures.mkString(", ")}")
+//    // Create new column "indexed" with categorical values transformed to indices
+//    val indexedData = indexerModel.transform(data)
+//    indexedData.show(false)
+
+    // 29.
+    spark.createDataFrame(Seq(
+      (0, 'a'),
+      (1, 'b),
+      (2, 'c),
+      (3, 'd)
+    )).toDF("index", "category").show()
 
 //
   }
